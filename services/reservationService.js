@@ -62,7 +62,7 @@ const findAllReservations= async () => {
 
 const findAllUnassignedReservations= async () => {
     try {
-        const reservations = await Reservation.find({mechanicId: {$ne : null}});
+        const reservations = await Reservation.find({mechanicId: null});
         return reservations;
     } catch (error) {
         throw new Error("Erreur lors de la récupération des reservations : " + error.message);
