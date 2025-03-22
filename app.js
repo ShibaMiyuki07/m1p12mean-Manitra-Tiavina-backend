@@ -1,5 +1,6 @@
 const express = require('express');
 const userRoutes = require('./routes/userRoutes');
+const reservationRoutes = require('./routes/reservationRoutes');
 const authMiddleware = require('./middleware/authMiddleware');
 
 const app = express();
@@ -9,6 +10,7 @@ app.use(express.json());
 
 // Routes
 app.use('/users', authMiddleware, userRoutes);
+app.use('/reservations', reservationRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
