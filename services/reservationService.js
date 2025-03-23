@@ -69,11 +69,21 @@ const findAllUnassignedReservations= async () => {
     }
 };
 
+const findReservationByMechanic= async (mechanicId) => {
+    try {
+        const reservations = await Reservation.find({mechanicId: mechanicId});
+        return reservations;
+    } catch (error) {
+        throw new Error("Erreur lors de la récupération des reservations : " + error.message);
+    }
+};
+
 module.exports = {
     createReservation,
     findReservationById,
     updateReservation,
     deleteReservation,
     findAllReservations,
-    findAllUnassignedReservations
+    findAllUnassignedReservations,
+    findReservationByMechanic,
 };

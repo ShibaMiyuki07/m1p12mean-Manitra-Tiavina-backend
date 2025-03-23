@@ -59,11 +59,21 @@ const getAllUnassignedReservation = async (req, res) => {
     }
 };
 
+const getReservationByMechanicId = async (req, res) => {
+    try {
+        const reservation = await reservationService.findReservationByMechanic(req.params.id);
+        res.status(200).json(reservation);
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+};
+
 module.exports = {
     createReservation,
     getReservationById,
     updateReservation,
     deleteReservation,
     getAllReservation,
-    getAllUnassignedReservation
+    getAllUnassignedReservation,
+    getReservationByMechanicId
 };
