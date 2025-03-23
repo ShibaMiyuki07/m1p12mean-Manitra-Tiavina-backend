@@ -62,7 +62,24 @@ const findAllReservations= async () => {
 
 const findAllUnassignedReservations= async () => {
     try {
-        const reservations = await Reservation.find({mechanicId: null});
+        const reservations = await Reservation.aggregate([
+            { $match: { mechanicId: null } },
+            {
+                $lookup: {
+                    from: 'services',
+                    localField: 'serviceId',
+                    foreignField: '_id',
+                    as: 'result'
+                }
+            },
+            {
+                $unwind: {
+                    path: '$result',
+                    includeArrayIndex: 'string',
+                    preserveNullAndEmptyArrays: false
+                }
+            }
+        ]);
         return reservations;
     } catch (error) {
         throw new Error("Erreur lors de la récupération des reservations : " + error.message);
