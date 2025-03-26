@@ -1,13 +1,13 @@
 const express = require('express');
 const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
+const reservationRoutes = require('./routes/reservationRoutes');
 const authMiddleware = require('./middleware/authMiddleware');
 
 const app = express();
 
 // Middleware
 app.use(express.json());
-
 
 app.use(cors({
     origin: 'http://localhost:4200', // Autorise uniquement votre frontend
@@ -17,6 +17,7 @@ app.use(cors({
 }));
 // Routes
 app.use('/users', authMiddleware, userRoutes);
+app.use('/reservations', reservationRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
