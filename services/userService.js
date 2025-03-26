@@ -1,14 +1,35 @@
 const User = require("../models/User");
+const bcrypt = require('bcrypt');
+
+// Login
+const loginUser = async (email, password) => {
+    const user = await User.findOne({ email }).select('+password');
+    if (!user) throw new Error('Identifiants incorrects');
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) throw new Error('Identifiants incorrects');
+
+    return {
+        _id: user._id,
+        email: user.email,
+        role: user.role,
+        profile: user.profile
+    };
+};
 
 // Créer un utilisateur
 const createUser = async (userData) => {
-    try {
-        const user = new User(userData);
-        await user.save();
-        return user;
-    } catch (error) {
-        throw new Error("Erreur lors de la création de l'utilisateur : " + error.message);
-    }
+    const hashedPassword = await bcrypt.hash(userData.password, 10);
+    const user = new User({ ...userData, password: hashedPassword });
+    await user.save();
+    return user;
+};
+
+// Ajout d'une méthode pour ne pas exposer les mots de passe
+const sanitizeUser = (user) => {
+    const userObject = user.toObject();
+    delete userObject.password;
+    return userObject;
 };
 
 // Trouver un utilisateur par son ID
@@ -44,7 +65,7 @@ const deleteUser = async (userId) => {
         if (!user) {
             throw new Error("Utilisateur non trouvé");
         }
-        return user;
+        return sanitizeUser(user);
     } catch (error) {
         throw new Error("Erreur lors de la suppression de l'utilisateur : " + error.message);
     }
@@ -53,14 +74,16 @@ const deleteUser = async (userId) => {
 // Lister tous les utilisateurs
 const findAllUsers = async () => {
     try {
-        const users = await User.find();
-        return users;
+        const users = await User.find().select('-password');
+        return users.map(user => sanitizeUser(user));
     } catch (error) {
         throw new Error("Erreur lors de la récupération des utilisateurs : " + error.message);
     }
 };
 
 module.exports = {
+    loginUser,
+    sanitizeUser,
     createUser,
     findUserById,
     updateUser,

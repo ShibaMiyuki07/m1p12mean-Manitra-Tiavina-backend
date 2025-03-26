@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
 const reservationRoutes = require('./routes/reservationRoutes');
 const authMiddleware = require('./middleware/authMiddleware');
@@ -8,18 +9,12 @@ const app = express();
 // Middleware
 app.use(express.json());
 
-function setupCORS(req, res, next) {
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'X-Requested-With, Content-type,Accept,X-Access-Token,X-Key');
-    res.header('Access-Control-Allow-Origin', '*');
-    if (req.method === 'OPTIONS') {
-        res.status(200).end();
-    } else {
-        next();
-    }
-}
-app.use(setupCORS);
-app.all('/*', setupCORS);
+app.use(cors({
+    origin: 'http://localhost:4200', // Autorise uniquement votre frontend
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 // Routes
 app.use('/users', authMiddleware, userRoutes);
 app.use('/reservations', reservationRoutes);
