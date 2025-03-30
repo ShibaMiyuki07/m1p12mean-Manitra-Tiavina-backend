@@ -4,6 +4,7 @@ const userController = require("../controllers/userController");
 const router = express.Router();
 
 // Routes pour les utilisateurs
+router.post("/auth/login", userController.loginUser);
 router.post("/", userController.createUser);
 router.get("/:id", userController.getUserById);
 router.put("/:id", userController.updateUser);
