@@ -54,8 +54,7 @@ const deleteProduct= async (productId) => {
 // Lister tous les reservations
 const findAllProducts= async () => {
     try {
-        const products = await Product.find();
-        return products;
+        return await Product.find();
     } catch (error) {
         throw new Error("Erreur lors de la récupération des produits : " + error.message);
     }
@@ -63,7 +62,7 @@ const findAllProducts= async () => {
 
 const findAllProductWithStock= async () => {
     try {
-        const products = await Reservation.aggregate([
+        return await Product.aggregate([
             {
                 $lookup: {
                     from: 'stocks',
@@ -76,11 +75,10 @@ const findAllProductWithStock= async () => {
                 $unwind: {
                     path: '$result',
                     includeArrayIndex: 'string',
-                    preserveNullAndEmptyArrays: false
+                    preserveNullAndEmptyArrays: true
                 }
             }
         ]);
-        return products;
     } catch (error) {
         throw new Error("Erreur lors de la récupération des reservations : " + error.message);
     }
