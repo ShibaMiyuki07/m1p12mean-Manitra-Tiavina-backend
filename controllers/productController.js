@@ -45,10 +45,20 @@ const getAllProduct = async (req, res) => {
     }
 };
 
+const getAllProductWithStock = async (req, res) => {
+    try {
+        const reservations = await productService.findAllProductWithStock();
+        res.status(200).json(reservations);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+};
+
 module.exports = {
     createProduct,
     getProductById,
     updateProduct,
     deleteProduct,
-    getAllProduct
+    getAllProduct,
+    getAllProductWithStock,
 };
