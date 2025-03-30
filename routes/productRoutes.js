@@ -9,6 +9,6 @@ router.get("/:id", productController.getProductById);
 router.put("/:id", productController.updateProduct);
 router.delete("/:id", productController.deleteProduct);
 router.get("/", productController.getAllProduct);
-router.get("/stock", productController.getAllProductWithStock);
+router.get("/with/stocks", productController.getAllProductWithStock);
 
 module.exports = router;
