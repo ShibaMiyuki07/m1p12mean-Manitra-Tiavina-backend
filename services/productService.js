@@ -1,4 +1,5 @@
 const Product = require("../models/Product");
+const Reservation = require("../models/Reservation");
 
 // Créer une reservation
 const createProduct = async (productData) => {
@@ -60,10 +61,36 @@ const findAllProducts= async () => {
     }
 };
 
+const findAllProductWithStock= async () => {
+    try {
+        const products = await Reservation.aggregate([
+            {
+                $lookup: {
+                    from: 'stocks',
+                    localField: '_id',
+                    foreignField: 'productId',
+                    as: 'result'
+                }
+            },
+            {
+                $unwind: {
+                    path: '$result',
+                    includeArrayIndex: 'string',
+                    preserveNullAndEmptyArrays: false
+                }
+            }
+        ]);
+        return products;
+    } catch (error) {
+        throw new Error("Erreur lors de la récupération des reservations : " + error.message);
+    }
+};
+
 module.exports = {
     createProduct,
     findProductById,
     updateProduct,
     deleteProduct,
     findAllProducts,
+    findAllProductWithStock
 };
