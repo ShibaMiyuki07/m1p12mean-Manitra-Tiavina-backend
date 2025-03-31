@@ -13,6 +13,7 @@ const loginUser = async (email, password) => {
         _id: user._id,
         email: user.email,
         role: user.role,
+        username: user.username,
         profile: user.profile
     };
 };
