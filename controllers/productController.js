@@ -54,6 +54,21 @@ const getAllProductWithStock = async (req, res) => {
     }
 };
 
+async function getGroupedProducts(req, res) {
+    try {
+        const groupedProducts = await productService.getProductsGroupedByCategory();
+        res.status(200).json({
+            success: true,
+            data: groupedProducts
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+}
+
 module.exports = {
     createProduct,
     getProductById,
@@ -61,4 +76,5 @@ module.exports = {
     deleteProduct,
     getAllProduct,
     getAllProductWithStock,
+    getGroupedProducts
 };

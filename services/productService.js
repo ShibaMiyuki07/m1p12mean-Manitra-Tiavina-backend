@@ -84,11 +84,48 @@ const findAllProductWithStock= async () => {
     }
 };
 
+async function getProductsGroupedByCategory() {
+    try {
+        const results = await Product.aggregate([
+            {
+                $group: {
+                    _id: "$category",
+                    products: {
+                        $push: {
+                            _id: "$_id",
+                            name: "$name",
+                            description: "$description",
+                            price: "$price",
+                            image: "$image",
+                            createdAt: "$createdAt",
+                            updatedAt: "$updatedAt"
+                        }
+                    },
+                    count: { $sum: 1 }
+                }
+            },
+            {
+                $sort: { _id: 1 }
+            }
+        ]);
+
+        return results.map(group => ({
+            category: group._id,
+            products: group.products,
+            productCount: group.count
+        }));
+
+    } catch (error) {
+        throw new Error(`Erreur lors du regroupement des produits: ${error.message}`);
+    }
+}
+
 module.exports = {
     createProduct,
     findProductById,
     updateProduct,
     deleteProduct,
     findAllProducts,
-    findAllProductWithStock
+    findAllProductWithStock,
+    getProductsGroupedByCategory
 };
