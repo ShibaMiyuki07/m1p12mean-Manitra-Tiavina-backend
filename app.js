@@ -21,7 +21,7 @@ app.use(cors({
 app.use('/users', authMiddleware, userRoutes);
 app.use('/reservations', reservationRoutes);
 app.use('/products', productRoutes);
-app.use('/stock', stockRoutes);
+app.use('/stocks', stockRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

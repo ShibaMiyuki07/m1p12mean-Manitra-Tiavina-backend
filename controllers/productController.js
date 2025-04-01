@@ -30,7 +30,7 @@ const updateProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
     try {
         const user = await productService.deleteProduct(req.params.id);
-        res.status(200).json({ message: "Utilisateur supprimé avec succès", user });
+        res.status(200).json({ message: "Produit supprimé avec succès", user });
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
@@ -54,6 +54,15 @@ const getAllProductWithStock = async (req, res) => {
     }
 };
 
+const getProductByIdWithStock = async (req, res) => {
+    try {
+        const reservations = await productService.findProductByIdWithStock(req.params.id);
+        res.status(200).json(reservations);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+};
+
 module.exports = {
     createProduct,
     getProductById,
@@ -61,4 +70,5 @@ module.exports = {
     deleteProduct,
     getAllProduct,
     getAllProductWithStock,
+    getProductByIdWithStock
 };
