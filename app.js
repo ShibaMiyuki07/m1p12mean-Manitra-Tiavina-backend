@@ -9,15 +9,14 @@ const authMiddleware = require('./middleware/authMiddleware');
 
 
 const {json} = require("body-parser");
+const {join} = require("node:path");
 
 const app = express();
 
 // Middleware
 app.use(express.json());
-
+app.use('/pictures', express.static(join(__dirname, 'pictures')));
 app.use(json());
-
-
 
 app.use(cors({
     origin: 'http://localhost:4200', // Autorise uniquement votre frontend

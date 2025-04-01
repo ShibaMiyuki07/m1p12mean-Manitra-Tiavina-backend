@@ -1,14 +1,15 @@
 const multer = require('multer');
 
+
+
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'pictures/product');
+        cb(null, "pictures");
     },
     filename: function (req, file, cb) {
         cb(null, file.originalname);
     },
 });
-
 var upload = multer({ storage: storage });
 const processImageUpload = (file) => ({
     filename: file.filename,
