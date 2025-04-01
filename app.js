@@ -4,6 +4,7 @@ const userRoutes = require('./routes/userRoutes');
 const reservationRoutes = require('./routes/reservationRoutes');
 const productRoutes = require('./routes/productRoutes');
 const serviceRoutes = require('./routes/serviceRoutes');
+const promotionRoutes = require('./routes/promotionRoutes');
 const authMiddleware = require('./middleware/authMiddleware');
 
 const app = express();
@@ -22,6 +23,7 @@ app.use('/users', authMiddleware, userRoutes);
 app.use('/reservations', reservationRoutes);
 app.use('/products', productRoutes);
 app.use('/services', serviceRoutes);
+app.use('/promotions', promotionRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
