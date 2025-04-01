@@ -3,6 +3,7 @@ const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
 const reservationRoutes = require('./routes/reservationRoutes');
 const productRoutes = require('./routes/productRoutes');
+const serviceRoutes = require('./routes/serviceRoutes');
 const authMiddleware = require('./middleware/authMiddleware');
 
 const app = express();
@@ -20,6 +21,7 @@ app.use(cors({
 app.use('/users', authMiddleware, userRoutes);
 app.use('/reservations', reservationRoutes);
 app.use('/products', productRoutes);
+app.use('/services', serviceRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

@@ -30,7 +30,7 @@ const updateProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
     try {
         const user = await productService.deleteProduct(req.params.id);
-        res.status(200).json({ message: "Utilisateur supprimé avec succès", user });
+        res.status(200).json({ message: "Produit supprimé avec succès", user });
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
