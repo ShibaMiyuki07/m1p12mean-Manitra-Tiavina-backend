@@ -4,12 +4,20 @@ const userRoutes = require('./routes/userRoutes');
 const reservationRoutes = require('./routes/reservationRoutes');
 const productRoutes = require('./routes/productRoutes');
 const stockRoutes = require('./routes/stockRoutes');
+const utilRoutes = require('./routes/utilRoutes');
 const authMiddleware = require('./middleware/authMiddleware');
+
+
+const {json} = require("body-parser");
 
 const app = express();
 
 // Middleware
 app.use(express.json());
+
+app.use(json());
+
+
 
 app.use(cors({
     origin: 'http://localhost:4200', // Autorise uniquement votre frontend
@@ -22,6 +30,7 @@ app.use('/users', authMiddleware, userRoutes);
 app.use('/reservations', reservationRoutes);
 app.use('/products', productRoutes);
 app.use('/stocks', stockRoutes);
+app.use('/utils',utilRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
