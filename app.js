@@ -3,6 +3,7 @@ const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
 const reservationRoutes = require('./routes/reservationRoutes');
 const productRoutes = require('./routes/productRoutes');
+const stockRoutes = require('./routes/stockRoutes');
 const serviceRoutes = require('./routes/serviceRoutes');
 const promotionRoutes = require('./routes/promotionRoutes');
 const cartRoutes = require('./routes/cartRoutes');
@@ -23,6 +24,7 @@ app.use(cors({
 app.use('/users', userRoutes);
 app.use('/reservations', reservationRoutes);
 app.use('/products', productRoutes);
+app.use('/stocks', stockRoutes);
 app.use('/services', serviceRoutes);
 app.use('/promotions', promotionRoutes);
 app.use('/cart', authMiddleware, cartRoutes);

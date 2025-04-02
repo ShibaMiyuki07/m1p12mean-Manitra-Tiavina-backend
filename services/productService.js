@@ -1,5 +1,7 @@
 const Product = require("../models/Product");
 const Reservation = require("../models/Reservation");
+const mongoose = require("mongoose");
+var ObjectId = mongoose.Types.ObjectId;
 
 // Créer une reservation
 const createProduct = async (productData) => {
@@ -80,9 +82,40 @@ const findAllProductWithStock= async () => {
             }
         ]);
     } catch (error) {
-        throw new Error("Erreur lors de la récupération des reservations : " + error.message);
+        throw new Error("Erreur lors de la récupération des productions avec leur stock : " + error.message);
     }
 };
+
+const findProductByIdWithStock= async (productId) => {
+    try {
+        return await Product.aggregate([
+            {
+                $match:
+                    {
+                        _id: new ObjectId(productId),
+                    }
+            },
+            {
+                $lookup: {
+                    from: "stocks",
+                    localField: "_id",
+                    foreignField: "productId",
+                    as: "result"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$result",
+                    includeArrayIndex: "string",
+                    preserveNullAndEmptyArrays: true
+                }
+            }
+        ]);
+    }
+    catch (e) {
+        throw new Error("Erreur lors de la récupération des productions avec son stock : " + error.message);
+    }
+}
 
 async function getProductsGroupedByCategory() {
     try {
@@ -127,5 +160,6 @@ module.exports = {
     deleteProduct,
     findAllProducts,
     findAllProductWithStock,
+    findProductByIdWithStock,
     getProductsGroupedByCategory
 };

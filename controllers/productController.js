@@ -54,6 +54,15 @@ const getAllProductWithStock = async (req, res) => {
     }
 };
 
+const getProductByIdWithStock = async (req, res) => {
+    try {
+        const reservations = await productService.findProductByIdWithStock(req.params.id);
+        res.status(200).json(reservations);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+};
+
 async function getGroupedProducts(req, res) {
     try {
         const groupedProducts = await productService.getProductsGroupedByCategory();
@@ -76,5 +85,6 @@ module.exports = {
     deleteProduct,
     getAllProduct,
     getAllProductWithStock,
-    getGroupedProducts
+    getGroupedProducts,
+    getProductByIdWithStock
 };

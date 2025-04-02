@@ -10,6 +10,7 @@ router.put("/:id", productController.updateProduct);
 router.delete("/:id", productController.deleteProduct);
 router.get("/", productController.getAllProduct);
 router.get("/with/stocks", productController.getAllProductWithStock);
+router.get("/with/stocks/:id", productController.getProductByIdWithStock);
 router.get("/grouped/category", productController.getGroupedProducts);
 
 module.exports = router;
