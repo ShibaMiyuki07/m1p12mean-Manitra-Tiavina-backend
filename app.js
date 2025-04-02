@@ -5,6 +5,7 @@ const reservationRoutes = require('./routes/reservationRoutes');
 const productRoutes = require('./routes/productRoutes');
 const serviceRoutes = require('./routes/serviceRoutes');
 const promotionRoutes = require('./routes/promotionRoutes');
+const cartRoutes = require('./routes/cartRoutes');
 const authMiddleware = require('./middleware/authMiddleware');
 
 const app = express();
@@ -19,11 +20,12 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 // Routes
-app.use('/users', authMiddleware, userRoutes);
+app.use('/users', userRoutes);
 app.use('/reservations', reservationRoutes);
 app.use('/products', productRoutes);
 app.use('/services', serviceRoutes);
 app.use('/promotions', promotionRoutes);
+app.use('/cart', authMiddleware, cartRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

@@ -1,11 +1,21 @@
 const userService = require("../services/userService");
+const jwt = require('jsonwebtoken');
 
 
 const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
         const user = await userService.loginUser(email, password);
-        res.status(200).json(user);
+        const token = jwt.sign(
+            { userId: user._id , role: user.role },
+            process.env.JWT_SECRET,
+            { expiresIn: '1d' } // Expire dans 24h
+        );
+
+        res.status(200).json({
+            user: user,
+            token
+        });
     } catch (error) {
         res.status(401).json({ message: 'Email ou mot de passe incorrect' });
     }
