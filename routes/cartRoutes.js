@@ -17,6 +17,9 @@ router.put('/products', [
     check('productId').isMongoId().withMessage('ID produit invalide'),
     check('quantity').isInt({ min: 1 }).withMessage('Quantité doit être au moins 1')
 ], cartController.updateProductQuantity);
+router.put('/services', [
+    check('serviceId').isMongoId().withMessage('ID service invalide')
+], cartController.updateProductQuantity);
 router.delete('/items/:itemId', cartController.removeItem);
 router.delete('/clear', cartController.clearCart);
 router.post('/checkout', cartController.checkout);

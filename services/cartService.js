@@ -73,6 +73,20 @@ class CartService {
         return await cart.save();
     }
 
+    static async updateServiceDate(userId, serviceId, date) {
+
+        const cart = await Cart.findOne({ userId, status: 'pending' });
+        if (!cart) throw new Error('Panier non trouvé');
+
+        const productItem = cart.products.find(item =>
+            item.productId && item.productId.equals(serviceId)
+        );
+        if (!productItem) throw new Error('Service non trouvé dans le panier');
+
+        productItem.date = date;
+        return await cart.save();
+    }
+
     // Supprimer un élément du panier
     static async removeCartItem(userId, itemId, isProduct) {
         const cart = await Cart.findOne({ userId, status: 'pending' });

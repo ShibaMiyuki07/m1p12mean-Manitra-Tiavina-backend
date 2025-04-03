@@ -64,6 +64,24 @@ exports.updateProductQuantity = async (req, res) => {
     }
 };
 
+exports.updateServiceDate = async (req, res) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        const cart = await CartService.updateServiceDate(
+            req.user._id,
+            req.body.serviceId,
+            req.body.date
+        );
+        res.json(cart);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+};
+
 exports.removeItem = async (req, res) => {
     try {
         await CartService.removeCartItem(

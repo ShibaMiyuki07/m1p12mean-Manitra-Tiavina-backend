@@ -8,6 +8,7 @@ const serviceRoutes = require('./routes/serviceRoutes');
 const promotionRoutes = require('./routes/promotionRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const utilRoutes = require('./routes/utilRoutes');
+const mechanicRoutes = require('./routes/mechanicRoutes');
 const authMiddleware = require('./middleware/authMiddleware');
 
 
@@ -36,6 +37,7 @@ app.use('/services', serviceRoutes);
 app.use('/promotions', promotionRoutes);
 app.use('/cart', authMiddleware, cartRoutes);
 app.use('/utils',utilRoutes);
+app.use('/mechanics', mechanicRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
