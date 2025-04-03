@@ -23,7 +23,7 @@ app.use('/pictures', express.static(join(__dirname, 'pictures')));
 app.use(json());
 
 app.use(cors({
-    origin: process.env., // Autorise uniquement votre frontend
+    origin: process.env.origin, // Autorise uniquement votre frontend
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization']
