@@ -68,6 +68,15 @@ const getReservationByMechanicId = async (req, res) => {
     }
 };
 
+const getReservationByUserId = async (req, res) => {
+    try {
+        const reservation = await reservationService.findReservationByUser(req.params.id);
+        res.status(200).json(reservation);
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+};
+
 module.exports = {
     createReservation,
     getReservationById,
@@ -75,5 +84,6 @@ module.exports = {
     deleteReservation,
     getAllReservation,
     getAllUnassignedReservation,
-    getReservationByMechanicId
+    getReservationByMechanicId,
+    getReservationByUserId,
 };

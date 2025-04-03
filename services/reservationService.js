@@ -173,6 +173,53 @@ const findReservationByMechanic= async (mechanicId) => {
     }
 };
 
+const findReservationByUser= async (userId) => {
+    try {
+        const reservations = await Reservation.aggregate([
+            {
+                $match: {
+                    userId: new ObjectId(userId)
+                }
+            },
+            {
+                $lookup: {
+                    from: "services",
+                    localField: "serviceId",
+                    foreignField: "_id",
+                    as: "result"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$result",
+                    includeArrayIndex: "string",
+                    preserveNullAndEmptyArrays: false
+                }
+            },
+            {
+                $lookup:
+                    {
+                        from: "users",
+                        localField: "userId",
+                        foreignField: "_id",
+                        as: "user"
+                    }
+            },
+            {
+                $unwind:
+                    {
+                        path: "$user",
+                        includeArrayIndex: "string",
+                        preserveNullAndEmptyArrays: false
+                    }
+            }
+        ]);
+        return reservations;
+    } catch (error) {
+        throw new Error("Erreur lors de la récupération des reservations : " + error.message);
+    }
+};
+
 module.exports = {
     createReservation,
     findReservationById,
@@ -181,4 +228,5 @@ module.exports = {
     findAllReservations,
     findAllUnassignedReservations,
     findReservationByMechanic,
+    findReservationByUser
 };
