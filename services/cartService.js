@@ -93,11 +93,9 @@ class CartService {
         if (!cart) throw new Error('Panier non trouvé');
 
         if (isProduct) {
-            cart.products = cart.products.filter(
-                item => !item._id.equals(itemId));
+            cart.products = cart.products.filter(item => item.productId?.toString() !== itemId);
         } else {
-            cart.services = cart.services.filter(
-                item => !item._id.equals(itemId));
+            cart.services = cart.services.filter(item => item.serviceId?.toString() !== itemId);
         }
 
         return await cart.save();
