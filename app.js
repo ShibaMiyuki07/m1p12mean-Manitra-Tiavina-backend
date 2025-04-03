@@ -23,7 +23,7 @@ app.use('/pictures', express.static(join(__dirname, 'pictures')));
 app.use(json());
 
 app.use(cors({
-    origin: 'http://localhost:4200', // Autorise uniquement votre frontend
+    origins: ['http://localhost:4200','https://garazy.netlify.app'], // Autorise uniquement votre frontend
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization']
