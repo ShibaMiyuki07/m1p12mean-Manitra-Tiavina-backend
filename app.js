@@ -9,6 +9,8 @@ const promotionRoutes = require('./routes/promotionRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const utilRoutes = require('./routes/utilRoutes');
 const mechanicRoutes = require('./routes/mechanicRoutes');
+const chatRoutes = require('./routes/chatRoutes');
+const discussionRoutes = require('./routes/discussionRoutes');
 const authMiddleware = require('./middleware/authMiddleware');
 
 
@@ -38,6 +40,8 @@ app.use('/promotions', promotionRoutes);
 app.use('/cart', authMiddleware, cartRoutes);
 app.use('/utils',utilRoutes);
 app.use('/mechanics', mechanicRoutes);
+app.use('/chats',chatRoutes);
+app.use('/discussions',discussionRoutes)
 
 // Error handling middleware
 app.use((err, req, res, next) => {
