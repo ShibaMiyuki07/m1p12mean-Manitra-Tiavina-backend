@@ -64,6 +64,15 @@ exports.updateProductQuantity = async (req, res) => {
     }
 };
 
+exports.updateCart = async (req, res) => {
+    try {
+        const cart = await CartService.updateCart(req.params.id, req.body);
+        res.status(200).json(cart);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+};
+
 exports.updateServiceDate = async (req, res) => {
     try {
         const errors = validationResult(req);
