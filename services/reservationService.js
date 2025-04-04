@@ -103,7 +103,7 @@ const findAllReservations= async () => {
 const findAllUnassignedReservations= async () => {
     try {
         const reservations = await Reservation.aggregate([
-            { $match: { mechanicId: null } },
+            { $match: { $and : [{mechanicId: null},{status : "unassigned"}] } },
             {
                 $lookup: {
                     from: 'services',
