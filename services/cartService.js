@@ -73,6 +73,19 @@ class CartService {
         return await cart.save();
     }
 
+    static async updateCart(cartId,cartData)
+    {
+        try {
+            const cart = await Cart.findByIdAndUpdate(cartId, cartData, { new: true });
+            if (!cart) {
+                throw new Error("Produit non trouvé");
+            }
+            return cart;
+        } catch (error) {
+            throw new Error("Erreur lors de la mise à jour du produit : " + error.message);
+        }
+    }
+
     static async updateServiceDate(userId, serviceId, date) {
 
         const cart = await Cart.findOne({ userId, status: 'pending' });
