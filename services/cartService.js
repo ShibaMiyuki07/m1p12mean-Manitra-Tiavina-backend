@@ -78,8 +78,8 @@ class CartService {
         const cart = await Cart.findOne({ userId, status: 'pending' });
         if (!cart) throw new Error('Panier non trouvé');
 
-        const productItem = cart.products.find(item =>
-            item.productId && item.productId.equals(serviceId)
+        const productItem = cart.services.find(item =>
+            item.serviceId && item.serviceId.equals(serviceId)
         );
         if (!productItem) throw new Error('Service non trouvé dans le panier');
 
