@@ -1,10 +1,31 @@
 const userService = require("../services/userService");
+const jwt = require('jsonwebtoken');
+
+
+const loginUser = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const user = await userService.loginUser(email, password);
+        const token = jwt.sign(
+            { userId: user._id , role: user.role },
+            process.env.JWT_SECRET,
+            { expiresIn: '1d' } // Expire dans 24h
+        );
+
+        res.status(200).json({
+            user: user,
+            token
+        });
+    } catch (error) {
+        res.status(401).json({ message: 'Email ou mot de passe incorrect' });
+    }
+};
 
 // Créer un utilisateur
 const createUser = async (req, res) => {
     try {
         const user = await userService.createUser(req.body);
-        res.status(201).json(user);
+        res.status(201).json(userService.sanitizeUser(user));
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
@@ -14,7 +35,7 @@ const createUser = async (req, res) => {
 const getUserById = async (req, res) => {
     try {
         const user = await userService.findUserById(req.params.id);
-        res.status(200).json(user);
+        res.status(200).json(userService.sanitizeUser(user));
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
@@ -24,7 +45,7 @@ const getUserById = async (req, res) => {
 const updateUser = async (req, res) => {
     try {
         const user = await userService.updateUser(req.params.id, req.body);
-        res.status(200).json(user);
+        res.status(200).json(userService.sanitizeUser(user));
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
@@ -42,6 +63,7 @@ const deleteUser = async (req, res) => {
 
 // Lister tous les utilisateurs
 const getAllUsers = async (req, res) => {
+    console.log("getAllUsers");
     try {
         const users = await userService.findAllUsers();
         res.status(200).json(users);
@@ -56,4 +78,5 @@ module.exports = {
     updateUser,
     deleteUser,
     getAllUsers,
+    loginUser
 };

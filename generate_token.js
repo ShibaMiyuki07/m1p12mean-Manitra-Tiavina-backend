@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 
 // Données à inclure dans le token (payload)
 const payload = {
-    userId: "1",
+    user: "1",
     role: "client",
 };
 
