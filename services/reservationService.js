@@ -1,4 +1,6 @@
 const Reservation = require("../models/Reservation");
+const mongoose = require("mongoose");
+var ObjectId = mongoose.Types.ObjectId;
 
 // Créer une reservation
 const createReservation = async (userData) => {
@@ -14,7 +16,45 @@ const createReservation = async (userData) => {
 // Trouver un utilisateur par son ID
 const findReservationById = async (reservationId) => {
     try {
-        const reservation = await Reservation.findById(reservationId);
+        const reservation = await Reservation.aggregate([
+            {
+                $match: {
+                    _id: new ObjectId(reservationId)
+                }
+            },
+            {
+                $lookup: {
+                    from: "services",
+                    localField: "serviceId",
+                    foreignField: "_id",
+                    as: "result"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$result",
+                    includeArrayIndex: "string",
+                    preserveNullAndEmptyArrays: false
+                }
+            },
+            {
+                $lookup:
+                    {
+                        from: "users",
+                        localField: "userId",
+                        foreignField: "_id",
+                        as: "user"
+                    }
+            },
+            {
+                $unwind:
+                    {
+                        path: "$user",
+                        includeArrayIndex: "string",
+                        preserveNullAndEmptyArrays: false
+                    }
+            }
+        ]);
         if (!reservation) {
             throw new Error("Reservation non trouvé");
         }
@@ -88,7 +128,92 @@ const findAllUnassignedReservations= async () => {
 
 const findReservationByMechanic= async (mechanicId) => {
     try {
-        const reservations = await Reservation.find({mechanicId: mechanicId});
+        const reservations = await Reservation.aggregate([
+            {
+                $match: {
+                    mechanicId: new ObjectId(mechanicId)
+                }
+            },
+            {
+                $lookup: {
+                    from: "services",
+                    localField: "serviceId",
+                    foreignField: "_id",
+                    as: "result"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$result",
+                    includeArrayIndex: "string",
+                    preserveNullAndEmptyArrays: false
+                }
+            },
+            {
+                $lookup:
+                    {
+                        from: "users",
+                        localField: "userId",
+                        foreignField: "_id",
+                        as: "user"
+                    }
+            },
+            {
+                $unwind:
+                    {
+                        path: "$user",
+                        includeArrayIndex: "string",
+                        preserveNullAndEmptyArrays: false
+                    }
+            }
+        ]);
+        return reservations;
+    } catch (error) {
+        throw new Error("Erreur lors de la récupération des reservations : " + error.message);
+    }
+};
+
+const findReservationByUser= async (userId) => {
+    try {
+        const reservations = await Reservation.aggregate([
+            {
+                $match: {
+                    userId: new ObjectId(userId)
+                }
+            },
+            {
+                $lookup: {
+                    from: "services",
+                    localField: "serviceId",
+                    foreignField: "_id",
+                    as: "result"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$result",
+                    includeArrayIndex: "string",
+                    preserveNullAndEmptyArrays: false
+                }
+            },
+            {
+                $lookup:
+                    {
+                        from: "users",
+                        localField: "userId",
+                        foreignField: "_id",
+                        as: "user"
+                    }
+            },
+            {
+                $unwind:
+                    {
+                        path: "$user",
+                        includeArrayIndex: "string",
+                        preserveNullAndEmptyArrays: false
+                    }
+            }
+        ]);
         return reservations;
     } catch (error) {
         throw new Error("Erreur lors de la récupération des reservations : " + error.message);
@@ -103,4 +228,5 @@ module.exports = {
     findAllReservations,
     findAllUnassignedReservations,
     findReservationByMechanic,
+    findReservationByUser
 };
