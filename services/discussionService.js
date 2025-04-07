@@ -28,14 +28,10 @@ const getAllDiscussions = async (userId) => {
                 $match: {
                     $or: [
                         {
-                            senderId: new ObjectId(
-                                "65f8e8b1e4b1a2b3c4d5e6f1"
-                            )
+                            senderId: new ObjectId(userId)
                         },
                         {
-                            receiverId: new ObjectId(
-                                "65f8e8b1e4b1a2b3c4d5e6f1"
-                            )
+                            receiverId: new ObjectId(userId)
                         }
                     ]
                 }
@@ -86,7 +82,9 @@ const getAllDiscussions = async (userId) => {
                                     ]
                                 }
                             }
-                        }
+                        },
+                        { $sort: { createdAt: -1 } },
+                        { $limit: 1 }
                     ],
                     as: "lastMessage"
                 }
