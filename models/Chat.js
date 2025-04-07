@@ -18,6 +18,13 @@ const chatSchema = new Schema({
         content: {
             type: String,
             required: true
+        },
+        unread:{
+            type: Boolean,
+            default: true
+        },
+        readDate :{
+            type: Date
         }
     },
 
