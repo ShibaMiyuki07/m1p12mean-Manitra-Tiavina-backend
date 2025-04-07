@@ -7,6 +7,6 @@ const router = express.Router();
 router.post("/", chatController.addMessage);
 router.get("/receiver/:id", chatController.getMessageByReceiver);
 router.get("/sender/:id", chatController.getMessageBySender);
-router.get("/messages/:receiver/:sender", chatController.getAllMessage);
+router.get("/discussions/:discussionId", chatController.getAllMessage);
 
 module.exports = router;

@@ -1,7 +1,11 @@
 const Chat = require('../models/Chat');
+const Discussion = require('../models/Discussion');
+const mongoose = require("mongoose");
+var ObjectId = mongoose.Types.ObjectId;
 class ChatService {
 
     static async addMessage(data) {
+        await Discussion.updateOne({_id : new ObjectId(data.discussionId)}, {updatedAt : new Date()});
         return Chat.create(data);
     }
 
@@ -9,8 +13,8 @@ class ChatService {
         return Chat.find({senderId : senderId});
     }
 
-    static async getAllMessage(receiver, sender) {
-        return Chat.find({senderId : receiver , receiverId :sender}).sort({createdAt : -1});
+    static async getAllMessage(discussionId) {
+        return Chat.find({discussionId:discussionId}).sort({createdAt : -1});
     }
 
     static async getMessageByReceiver(receiverId) {

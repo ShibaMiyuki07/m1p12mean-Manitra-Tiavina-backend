@@ -29,7 +29,7 @@ const getMessageByReceiver = async (req, res) => {
 
 const getAllMessage = async (req, res) => {
     try {
-        const messages = await chatService.getAllMessage(req.params.receiver,req.params.sender);
+        const messages = await chatService.getAllMessage(req.params.discussionId);
         res.status(200).json(messages);
     } catch (error) {
         res.status(400).json({ message: error.message });
