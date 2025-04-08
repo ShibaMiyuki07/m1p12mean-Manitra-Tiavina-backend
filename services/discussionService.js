@@ -103,8 +103,74 @@ const getAllDiscussions = async (userId) => {
     }
 }
 
+const getUnreadDiscussions = async (userId) => {
+    try {
+        return Discussion.aggregate([
+            {
+                $match: {
+                    $or: [
+                        {
+                            senderId: new ObjectId(userId)
+                        },
+                        {
+                            receiverId: new ObjectId(userId)
+                        }
+                    ]
+                }
+            },
+            {
+                $lookup: {
+                    from: "chats",
+                    let: {
+                        discussionId: "$_id"
+                    },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $eq: [
+                                        "$discussionId",
+                                        "$$discussionId"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            $sort: {
+                                createdAt: -1
+                            }
+                        },
+                        {
+                            $limit: 1
+                        }
+                    ],
+                    as: "lastMessage"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$lastMessage",
+                    includeArrayIndex: "string",
+                    preserveNullAndEmptyArrays: false
+                }
+            },
+            {
+                $match: {
+                    $and : [
+                        {"lastMessage.unread": true},
+                        {"senderId" : {$ne : new ObjectId(userId)}}
+                    ]
+                }
+            }
+        ]).sort({updatedAt: 1});
+    } catch (error) {
+        throw new Error("Erreur lors de getAllDiscussions : " + error.message);
+    }
+}
+
 module.exports = {
     createDiscussion,
     getDiscussionByUser,
     getAllDiscussions,
+    getUnreadDiscussions
 }

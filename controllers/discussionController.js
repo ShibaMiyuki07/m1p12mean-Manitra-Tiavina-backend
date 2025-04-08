@@ -30,8 +30,19 @@ const getAllDiscussions = async (req,res) =>
     }
 }
 
+const getUnreadDiscussions = async (req,res) =>
+{
+    try {
+        const discussions = await discussionController.getUnreadDiscussions(req.params.id);
+        res.status(201).json(discussions);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+}
+
 module.exports = {
     createDiscussion,
     getDiscussionByUser,
     getAllDiscussions,
+    getUnreadDiscussions
 };

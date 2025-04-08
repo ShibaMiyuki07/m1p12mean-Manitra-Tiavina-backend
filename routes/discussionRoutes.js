@@ -6,6 +6,7 @@ const router = express.Router();
 router.post("/", discussionController.createDiscussion);
 router.get("/users/:receiver/:sender", discussionController.getDiscussionByUser);
 router.get("/all/:id", discussionController.getAllDiscussions);
+router.get("/unread/:id", discussionController.getUnreadDiscussions);
 
 
 
