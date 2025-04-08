@@ -36,10 +36,20 @@ const getAllMessage = async (req, res) => {
     }
 };
 
+const updateMessage = async (req, res) => {
+    try {
+        const messages = await chatService.updateMessage(req.params.messageId, req.body);
+        res.status(200).json(messages);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+};
+
 
 module.exports = {
     addMessage,
     getMessageByReceiver,
     getMessageBySender,
     getAllMessage,
+    updateMessage,
 };

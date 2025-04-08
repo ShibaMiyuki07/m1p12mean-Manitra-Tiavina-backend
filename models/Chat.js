@@ -19,9 +19,9 @@ const chatSchema = new Schema({
             type: String,
             required: true
         },
-        unread:{
+        unread : {
             type: Boolean,
-            default: true
+            default : true
         },
         readDate :{
             type: Date
