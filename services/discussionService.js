@@ -156,9 +156,13 @@ const getUnreadDiscussions = async (userId) => {
             },
             {
                 $match: {
-                    $and : [
-                        {"lastMessage.unread": true},
-                        {"senderId" : {$ne : new ObjectId(userId)}}
+                    $and: [
+                        {
+                            "lastMessage.unread": true
+                        },
+                        {
+                            "lastMessage.receiverId": new ObjectId(userId)
+                        }
                     ]
                 }
             }
